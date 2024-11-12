@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Role {
+  id        Int      @id @unique @default(autoincrement())
+  title     String   @unique
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id        Int      @id @unique @default(autoincrement())
+  username  String   @unique
+  email     String   @unique
+  password  String
+  image     String?
+  role      Role     @relation(fields: [role_id], references: [id])
+  role_id   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Location {
+  id       Int    @id @unique @default(autoincrement())
+  building String
+  // alias String?
+  floor    Int
+  room     Int // ganti jadi string
+  // fakultas  String?
+  // prodi  String?
+  AC       AC[]
+}
+
+// { building, floor, room }
+
+model AC {
+  id           Int           @id @default(autoincrement())
+  unit_code    String        @unique
+  brand        String
+  type         String?
+  PK           String?
+  condition    Boolean
+  status       String        @default("Normal")
+  loc_id       Int
+  loc          Location      @relation(fields: [loc_id], references: [id])
+  installed_at String
+  Maintenance  Maintenance[]
+}
+
+// { unit_code, brand, type, PK, condition, loc_id, installed_at }
+
+model Maintenance {
+  id                  Int     @id @default(autoincrement())
+  acId                Int
+  AC                  AC      @relation(fields: [acId], references: [id])
+  start_date          String // Start _date of maintenance
+  end_date            String? // End date of maintenance
+  technician          String // Names of technicians involved
+  coordinator         String
+  cost                Float? // Cost of the maintenance
+  description         String? // General description of the maintenance
+  repair_details      String? // Details of the repair
+  replacement_details String? // Details of replacement parts, if any
+  maintenance_type    String?
+  status              String?
+}
+
+// { acId, start_date, technician, description, maintenance_type }
+
+// { acId, start_date, end_date, technician, cost, description, repair_details, replacement_details }
