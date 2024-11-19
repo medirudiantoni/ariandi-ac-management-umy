@@ -15,10 +15,12 @@ export default async function (req: NextApiRequest, res: NextApiResponse){
             res.status(500).json({ message: 'Server error', detail: error })
         }
     } else if (req.method === 'PATCH'){
-        const { building, floor, room } = req.body;
+        const { name, building, floor, room } = req.body;
         try {
             const result = await prisma.location.update({
                 data: {
+                    name,
+                    alias: `${building} ${floor}${room.length < 2 ? '0' + room : room}`,
                     building,
                     floor,
                     room

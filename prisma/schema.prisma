@@ -9,8 +9,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model Role {
@@ -34,13 +34,14 @@ model User {
 }
 
 model Location {
-  id       Int    @id @unique @default(autoincrement())
+  id       Int     @id @unique @default(autoincrement()) // tambah property name untuk: >>
+  name     String? // E6 = KH. Ibrahim
   building String
-  // alias String?
-  floor    Int
-  room     Int // ganti jadi string
-  // fakultas  String?
-  // prodi  String?
+  alias    String // misal: E6 305
+  floor    String
+  room     String // misal: 101
+  fakultas String?
+  prodi    String?
   AC       AC[]
 }
 
@@ -53,6 +54,7 @@ model AC {
   type         String?
   PK           String?
   condition    Boolean
+  is_broken    Boolean       @default(false)
   status       String        @default("Normal")
   loc_id       Int
   loc          Location      @relation(fields: [loc_id], references: [id])
@@ -60,24 +62,23 @@ model AC {
   Maintenance  Maintenance[]
 }
 
-// { unit_code, brand, type, PK, condition, loc_id, installed_at }
-
 model Maintenance {
   id                  Int     @id @default(autoincrement())
   acId                Int
   AC                  AC      @relation(fields: [acId], references: [id])
-  start_date          String // Start _date of maintenance
-  end_date            String? // End date of maintenance
-  technician          String // Names of technicians involved
+  start_date          String
+  end_date            String?
+  technician          String
   coordinator         String
-  cost                Float? // Cost of the maintenance
-  description         String? // General description of the maintenance
-  repair_details      String? // Details of the repair
-  replacement_details String? // Details of replacement parts, if any
+  cost                Float?
+  description         String?
+  repair_details      String?
+  replacement_details String?
   maintenance_type    String?
   status              String?
 }
 
 // { acId, start_date, technician, description, maintenance_type }
+// { end_date, cost, repair_details, replacement_details, status }
 
 // { acId, start_date, end_date, technician, cost, description, repair_details, replacement_details }

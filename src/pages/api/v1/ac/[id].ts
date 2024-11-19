@@ -15,7 +15,22 @@ export default async function (req: NextApiRequest, res: NextApiResponse){
         } catch (error) {
             res.status(500).json({ message: 'Server error', detail: error })
         }
-    } else if (req.method === 'PATCH'){
+    } else if(req.method === 'PATCH'){
+        const { condition, status } = req.body;
+        try {
+            await prisma.aC.update({
+                where: { id: Number(id) },
+                data: {
+                    condition,
+                    status,
+                    is_broken: false
+                }
+            });
+            res.status(201).json({ message: "set status ac: Under maintenance" });
+        } catch (error) {
+            res.status(500).json({ message: 'Server error', detail: error });
+        }
+    } else if (req.method === 'PUT'){
         const { unit_code, brand, type, PK, condition, loc_id, installed_at } = req.body;
         try {
             const result = await prisma.aC.update({

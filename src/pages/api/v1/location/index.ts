@@ -4,13 +4,15 @@ const prisma = new PrismaClient();
 
 export default async function (req: NextApiRequest, res: NextApiResponse){
     if(req.method === "POST"){
-        const { building, floor, room } = req.body;
+        const { name, building, floor, room } = req.body;
         try {
             const result = await prisma.location.create({
                 data: {
+                    name,
+                    alias: `${building} ${floor}${room.length < 2 ? '0' + room : room}`,
                     building,
                     floor,
-                    room
+                    room: `${floor}${room.length < 2 ? '0' + room : room}`
                 }
             });
             console.log(result)

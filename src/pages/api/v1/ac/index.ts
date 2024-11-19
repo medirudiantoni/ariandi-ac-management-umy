@@ -6,6 +6,12 @@ export default async function (req: NextApiRequest, res: NextApiResponse){
     if(req.method === "POST"){
         const { unit_code, brand, type, PK, condition, loc_id, installed_at } = req.body;
         try {
+            const isUnitCodeTrue = await prisma.aC.findUnique({
+                where: { unit_code: unit_code }
+            });
+            if(isUnitCodeTrue){
+                return res.status(409).json({ status: 409, message: 'Data Already exists' });
+            }
             const result = await prisma.aC.create({
                 data: {
                     unit_code,

@@ -1,16 +1,23 @@
 import TopBar from '@/components/elements/topBar'
+import LocType from '@/types/locData';
 import { X } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 
 const NewAc = () => {
-    const [isConfirm, setIsConfirm] = useState(false);
-    const [isLoc, setIsLoc] = useState({
+    const [isConfirm, setIsConfirm] = useState<boolean>(false);
+    const [isLoc, setIsLoc] = useState<{
+        building: string[];
+        floor: string[];
+        room: string[];
+        dataRoom: LocType[];
+    }>({
         building: [],
         floor: [],
         room: [],
-        dataRoom: []
-    })
+        dataRoom: [],
+    });
+
     const [isInputLoc, setIsInputLoc] = useState({
         building: "",
         floor: "",
@@ -29,7 +36,7 @@ const NewAc = () => {
 
     const handleSubmitForm = async () => {
         try {
-            const response = await fetch(`/api/v1/maintenance`, {
+            const response = await fetch(`/api/v1/ac`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -60,7 +67,7 @@ const NewAc = () => {
             toast.success('Menambah data Ac baru Sukses!');
         } catch (error) {
             console.log(`Error saat mengirim data: ${error}`);
-            toast.custom(<div className='text-red-600 py-2 px-4 rounded-full bg-white flex items-center gap-2'><X /> <p>Menambah Ac gagal</p></div>)
+            toast.custom(<div className='text-red-600 py-2 px-4 rounded-full bg-white flex items-center gap-2'><X /> <p>Kode unit sudah digunakan</p></div>)
             setIsConfirm(false)
         }
     };
@@ -69,7 +76,7 @@ const NewAc = () => {
         async function getLoc() {
             try {
                 const res = await fetch(`/api/v1/location/building`).then(res => res.json());
-                const buildings = res.data.map((item: any) => item.building);
+                const buildings = res.data.map((item: LocType) => item.building);
                 setIsLoc({ ...isLoc, building: buildings });
             } catch (error) {
                 console.log(error)
@@ -78,7 +85,7 @@ const NewAc = () => {
         async function getFloor(floor: string) {
             try {
                 const res = await fetch(`/api/v1/location/building/${floor}`).then(res => res.json());
-                const floors = res.data.map((item: any) => item.floor);
+                const floors = res.data.map((item: LocType) => item.floor);
                 setIsLoc(prevState => ({
                     ...prevState,
                     floor: floors
@@ -91,7 +98,7 @@ const NewAc = () => {
         async function getRoom(floor: string, room: string) {
             try {
                 const res = await fetch(`/api/v1/location/building/${floor}/${room}`).then(res => res.json());
-                const rooms = res.data.map((item: any) => item.room);
+                const rooms = res.data.map((item: LocType) => item.room);
                 setIsLoc(prevState => ({
                     ...prevState,
                     room: rooms,
@@ -112,12 +119,14 @@ const NewAc = () => {
         };
     }, [isInputLoc]);
 
-    const handleSelectRoomChange = (id: string) => {
-        const selectedData: any = isLoc.dataRoom.find((room: any) => room.id == id);
-        setIsInputLoc({ ...isInputLoc, room: selectedData.room, id: selectedData.id });
-        setIsInputData({ ...isInputData, loc_id: selectedData.id });
+    const handleSelectRoomChange = (id: Number) => {
+        const selectedData = isLoc.dataRoom.find((room: LocType) => room.id == Number(id));
+        if(selectedData){
+            setIsInputLoc({ ...isInputLoc, room: selectedData.room, id: String(selectedData.id) });
+            setIsInputData({ ...isInputData, loc_id: selectedData.id });
+        }
     };
-
+    
     return (
         <div className='w-full h-full bg-slate-50 relative pt-16'>
             <TopBar backButton={true} search={false} title='New AC' />
@@ -181,7 +190,7 @@ const NewAc = () => {
                                     id='select-building'
                                     className='w-full py-2 px-4 rounded-xl bg-slate-100 border-2'
                                 >
-                                    <option value="" disabled selected>Pilih Gedung</option>
+                                    <option value="" disabled>Pilih Gedung</option>
                                     {isLoc.building && isLoc.building.map((build, id) => (
                                         <option key={id} value={build}>{build}</option>
                                     ))}
@@ -192,19 +201,19 @@ const NewAc = () => {
                                     id='select-floor'
                                     className='w-full py-2 px-4 rounded-xl bg-slate-100 border-2'
                                 >
-                                    <option value="" disabled selected>Pilih Lantai</option>
+                                    <option value="" disabled>Pilih Lantai</option>
                                     {isLoc.floor && isLoc.floor.map((floor, id) => (
                                         <option key={id} value={floor}>Lantai {floor}</option>
                                     ))}
                                 </select>
                                 <select
-                                    onChange={(e) => handleSelectRoomChange(e.target.value)}
+                                    onChange={(e) => handleSelectRoomChange(Number(e.target.value))}
                                     value={isInputLoc.id}
                                     id='select-room'
                                     className='w-full py-2 px-4 rounded-xl bg-slate-100 border-2'
                                 >
-                                    <option value="" disabled selected>Pilih Ruangan</option>
-                                    {isLoc.dataRoom && isLoc.dataRoom.map((data: any, id) => (
+                                    <option value="" disabled>Pilih Ruangan</option>
+                                    {isLoc.dataRoom && isLoc.dataRoom.map((data: LocType, id) => (
                                         <option key={id} value={data.id}>{data.room}</option>
                                     ))}
                                 </select>

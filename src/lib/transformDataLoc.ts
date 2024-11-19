@@ -1,38 +1,8 @@
-type AcData = {
-    id: number;
-    building: string;
-    floor: number;
-    room: number;
-    Ac?: { id: number; brand: string; Condition: boolean }[];
-};
+import AcDataType from "@/types/acData";
+import LocType from "@/types/locData";
+import { BuildingData, FloorData } from "@/types/teriversal";
 
-type OutputData = {
-    building: string;
-    floors: number;
-    rooms: number;
-    total_ac: number;
-    condition_true: number;
-    condition_false: number;
-};
-
-// type AcData = {
-//     id: number;
-//     building: string;
-//     floor: number;
-//     room: number;
-//     Ac?: { id: number; brand: string; Condition: boolean }[];
-// };
-
-type FloorData = {
-    building: string;
-    floor: number;
-    rooms: number;
-    total_ac: number;
-    condition_true: number;
-    condition_false: number;
-};
-
-export function calculateFloorData(data: any[]): FloorData[] {
+export function calculateFloorData(data: LocType[]): FloorData[] {
     const floorMap: Record<string, FloorData> = {};
 
     data.forEach(({ building, floor, room, AC }) => {
@@ -41,7 +11,7 @@ export function calculateFloorData(data: any[]): FloorData[] {
         if (!floorMap[key]) {
             floorMap[key] = {
                 building,
-                floor,
+                floor: Number(floor),
                 rooms: 0,
                 total_ac: 0,
                 condition_true: 0,
@@ -57,8 +27,8 @@ export function calculateFloorData(data: any[]): FloorData[] {
             floorData.total_ac += AC.length;
 
             // Count conditions
-            AC.forEach((acUnit: any) => {
-                if (acUnit.Condition) {
+            AC.forEach((acUnit: AcDataType) => {
+                if (acUnit.condition) {
                     floorData.condition_true += 1;
                 } else {
                     floorData.condition_false += 1;
@@ -70,8 +40,8 @@ export function calculateFloorData(data: any[]): FloorData[] {
     return Object.values(floorMap);
 }
 
-export default function transformData(data: any[]): any[] {
-    const buildingMap: Record<string, any> = {};
+export default function transformData(data: LocType[]): BuildingData[] {
+    const buildingMap: Record<string, BuildingData> = {};
 
     data.forEach(({ building, floor, room, AC }) => {
         if (!buildingMap[building]) {
@@ -89,8 +59,8 @@ export default function transformData(data: any[]): any[] {
         buildingData.rooms += 1;
 
         // Update floors if a new floor is encountered
-        if (buildingData.floors < floor) {
-            buildingData.floors = floor;
+        if (buildingData.floors < Number(floor)) {
+            buildingData.floors = Number(floor);
         }
 
         // Only proceed if `Ac` is defined and has elements
@@ -98,7 +68,7 @@ export default function transformData(data: any[]): any[] {
             buildingData.total_ac += AC.length;
 
             // Count conditions
-            AC.forEach((acUnit: any) => {
+            AC.forEach((acUnit: AcDataType) => {
                 if (acUnit.condition) {
                     buildingData.condition_true += 1;
                 } else {

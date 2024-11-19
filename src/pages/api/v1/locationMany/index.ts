@@ -8,14 +8,16 @@ type Floor = {
 
 // Tipe untuk data yang akan di-insert ke database
 type LocationData = {
+  name?: string;
+  alias: string;
   building: string;
-  floor: number;
-  room: number;
+  floor: string;
+  room: string;
 };
 
 export default async function (req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
-    const { building, floors } = req.body;
+    const { name, building, floors } = req.body;
     try {
       const dataToInsert: LocationData[] = [];
 
@@ -24,13 +26,14 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
 
         for (let roomNumber = 1; roomNumber <= floor.roomCount; roomNumber++) {
           dataToInsert.push({
+            name,
+            alias: `${building} ${floorNumber}${String(roomNumber).length < 2 ? '0' + String(roomNumber) : roomNumber}`,
             building,
-            floor: floorNumber,
-            room: roomNumber,
+            floor: String(floorNumber),
+            room: `${floorNumber}${String(roomNumber).length < 2 ? '0' + String(roomNumber) : roomNumber}`,
           });
         }
       });
-
       const result = await prisma.location.createMany({
         data: dataToInsert,
       });

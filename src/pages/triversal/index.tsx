@@ -1,11 +1,20 @@
-import BuildingCard from '@/components/elements/buildingCard'
-import TopBar from '@/components/elements/topBar'
-import transformData from '@/lib/transformDataLoc'
-import { Grid2x2, ArrowUpDown } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import BuildingCard from '@/components/elements/buildingCard';
+import TopBar from '@/components/elements/topBar';
+import transformData from '@/lib/transformDataLoc';
+import { Grid2x2, ArrowUpDown } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+
+interface TriversalLocType {
+    building: string;
+    floors: number;
+    rooms: number;
+    condition_true: number;
+    condition_false: number;
+    total_ac: number;
+}
 
 const Triversal = () => {
-    const [isLoc, setLoc] = useState<any[]>([]);
+    const [isLoc, setLoc] = useState<TriversalLocType[]>([]);
     useEffect(() => {
         const getLoc = async () => {
             try {

@@ -28,7 +28,7 @@ export default async function (req: NextApiRequest, res: NextApiResponse) {
                     const listOfRooms = await prisma.location.findMany({
                         where: {
                             building: idArray[0],
-                            floor: parseInt(idArray[1])
+                            floor: String(idArray[1])
                         },
                         select: {
                             id: true,

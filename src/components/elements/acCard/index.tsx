@@ -12,7 +12,7 @@ type AcCardProps = {
 
 const AcCard: React.FC<AcCardProps> = ({ brand, location, status, isMaintaining, lastMaintenance, href = 'detail-ac' }) => {
     return (
-        <Link href={href} className='w-full h-fit p-4 hover:bg-blue-50 hover:ring-2 ring-blue-600 active:scale-95 duration-100 bg-blue-100 rounded-2xl'>
+        <Link href={href} className='w-full h-fit p-4 hover:bg-blue-50 ring-blue-600 active:scale-95 duration-100 bg-blue-100 rounded-2xl'>
             <div className="flex justify-between items-end pb-2 border-b">
                 <h3 className='text-2xl font-semibold'>{brand}</h3>
                 <p className='text-xl font-medium'>{location}</p>

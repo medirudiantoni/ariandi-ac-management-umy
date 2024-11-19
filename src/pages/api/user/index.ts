@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { getSession } from "next-auth/react";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from 'bcrypt';
+import { RoleSesssion } from "@/types/user";
 const prisma = new PrismaClient();
 
 export default async function handler(
@@ -37,7 +38,7 @@ export default async function handler(
             message: 'Unauthorized'
         });
     } else {
-        const { role }: any = session.user;
+        const { role }: RoleSesssion = session.user;
         if(role !== 'admin'){
             return res.status(403).json({
                 message: 'Unauthorized user'

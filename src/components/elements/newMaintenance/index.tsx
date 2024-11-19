@@ -18,7 +18,6 @@ const ModalNewMaintenance: React.FC<ModalNewMaintenanceProps> = ({ id, onClose }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log(isInputData);
         const data = {
             acId: Number(id),
             start_date: `${new Date().getTime()}`,
@@ -27,7 +26,10 @@ const ModalNewMaintenance: React.FC<ModalNewMaintenanceProps> = ({ id, onClose }
             maintenance_type: isInputData.maintenance_type,
             coordinator: isInputData.coordinator
         };
-        console.log(data)
+        const dataAcUpdate = {
+            condition: false,
+            status: `Sedang ${isInputData.maintenance_type}`
+        }
         try {
             const response = await fetch(`/api/v1/maintenance`, {
                 method: 'POST',
@@ -36,7 +38,14 @@ const ModalNewMaintenance: React.FC<ModalNewMaintenanceProps> = ({ id, onClose }
                 },
                 body: JSON.stringify(data)
             });
-            if (!response.ok) {
+            const updateAcStatus = await fetch(`/api/v1/ac/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(dataAcUpdate)
+            });
+            if (!response.ok && !updateAcStatus) {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             };
             toast.custom(<div className='py-2 px-4 rounded-full flex items-center gap-2 bg-blue-200'>
@@ -49,7 +58,7 @@ const ModalNewMaintenance: React.FC<ModalNewMaintenanceProps> = ({ id, onClose }
                 maintenance_type: "",
                 coordinator: ""
             });
-            // onClose();
+            onClose();
         } catch (error) {
             console.log(error);
             toast.error("Data pemeliharaan gagal dibuat");
