@@ -1,8 +1,5 @@
 import React from 'react'
 import TopBar from '@/components/elements/topBar'
-import { ChevronRight } from 'lucide-react'
-import { useRouter } from 'next/router'
-import BottomBar from '@/components/elements/bottomBar'
 
 const Settings = () => {
     return (

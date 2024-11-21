@@ -1,14 +1,13 @@
 import formatDateTime from '@/lib/timeFormat';
-import { query } from 'express';
 import { useRouter } from 'next/router';
 import React from 'react'
 
 interface MaintenanceCardType {
   id: number;
   no: number;
-  date: Number;
-  maintenance_type: String;
-  status: String;
+  date: number;
+  maintenance_type: string;
+  status: string;
 }
 
 const MaintenanceCard: React.FC<MaintenanceCardType> = ({ id, no, date, maintenance_type, status }) => {

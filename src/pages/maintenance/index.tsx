@@ -26,7 +26,7 @@ const Maintenance = () => {
             getAllMaintenanceData();
             setIsMounted(false);
         }
-    });
+    }, [isMounted]);
 
     return (
         <div className='w-full min-h-full bg-slate-50 relative pt-20 pb-16'>

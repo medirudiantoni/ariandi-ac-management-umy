@@ -57,7 +57,7 @@ const DetailAc = () => {
             getMaintenanceData(String(query.id));
         }
         getAc(String(query.id));
-    }, [isMaintenance]);
+    }, [isMaintenance, query.id]);
 
     const handleSetMaintenance = () => {
         if (isAc && isAc.status.includes("Sedang")) {

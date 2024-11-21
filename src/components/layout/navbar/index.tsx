@@ -23,7 +23,6 @@ const Navbar = () => {
           <CircleUserRound />
         </button>
         <Sidebar onClose={() => setIsSidebar(false)} isOpen={isSidebar} />
-        {/* {isSidebar && <Sidebar onClose={() => setIsSidebar(false)} />} */}
     </nav>
   )
 }

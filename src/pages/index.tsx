@@ -11,7 +11,7 @@ interface IsLocStateType {
   room: number;
 }
 
-const index = () => {
+const Index = () => {
   const [isLoc, setIsLoc] = useState<IsLocStateType>({
     building: 0,
     floor: 0,
@@ -137,4 +137,4 @@ const index = () => {
   )
 }
 
-export default index;
+export default Index;

@@ -1,5 +1,5 @@
 import { Minus, Plus } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect } from 'react'
 
 interface InputRoomType {
     onMinus: () => void;
@@ -12,7 +12,7 @@ interface InputRoomType {
 const InputRoom:React.FC<InputRoomType> = ({ onMinus, onPlus, onReset, value, onChange }) => {
     useEffect(() => {
         onReset();
-    }, []);
+    }, [onReset]);
     return (
         <div className="flex items-center gap-2">
             <button type='button' onClick={onMinus} className='cursor-pointer py-2 px-4 rounded-xl bg-orange-600 text-white active:scale-95 duration-75'><Minus /></button>

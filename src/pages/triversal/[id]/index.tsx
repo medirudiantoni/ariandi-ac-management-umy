@@ -1,4 +1,3 @@
-import AcCard from '@/components/elements/acCard';
 import RoomCard from '@/components/elements/roomCard';
 import TopBar from '@/components/elements/topBar'
 import transformData, { calculateFloorData } from '@/lib/transformDataLoc';

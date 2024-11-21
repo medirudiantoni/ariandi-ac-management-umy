@@ -16,7 +16,7 @@ type ModalNewMaintenanceProps = {
     onSetInitialMount: () => void;
 }
 
-const ModalEditMaintenance: React.FC<ModalNewMaintenanceProps> = ({ acId, id, onClose, onSetInitialMount }) => {
+const ModalEditMaintenance: React.FC<ModalNewMaintenanceProps> = ({ id, onClose, onSetInitialMount }) => {
     const maintenance_type_list = ["Pembersihan", "Penggantian", "Perbaikan"];
     const [isInputData, setIsInputData] = useState<InputData>({
         technician: "",
@@ -26,8 +26,6 @@ const ModalEditMaintenance: React.FC<ModalNewMaintenanceProps> = ({ acId, id, on
     });
 
     useEffect(() => {
-        console.log("acId: ", acId)
-        console.log("id: ", id)
         const getMaintenanceData = async () => {
             try {
                 const result = await fetch(`/api/v1/maintenance/${id}`).then(res => res.json());
@@ -39,12 +37,12 @@ const ModalEditMaintenance: React.FC<ModalNewMaintenanceProps> = ({ acId, id, on
                     coordinator: result.data.coordinator,
                 });
             } catch (error) {
-                console.log('failed');
+                console.log('failed: ', error);
             }
         }
 
         getMaintenanceData();
-    }, []);
+    }, [id]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();

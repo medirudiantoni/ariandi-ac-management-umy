@@ -5,7 +5,7 @@ import { BuildingData, FloorData } from "@/types/teriversal";
 export function calculateFloorData(data: LocType[]): FloorData[] {
     const floorMap: Record<string, FloorData> = {};
 
-    data.forEach(({ building, floor, room, AC }) => {
+    data.forEach(({ building, floor, AC }) => {
         const key = `${building}-${floor}`;
         
         if (!floorMap[key]) {
@@ -43,7 +43,7 @@ export function calculateFloorData(data: LocType[]): FloorData[] {
 export default function transformData(data: LocType[]): BuildingData[] {
     const buildingMap: Record<string, BuildingData> = {};
 
-    data.forEach(({ building, floor, room, AC }) => {
+    data.forEach(({ building, floor, AC }) => {
         if (!buildingMap[building]) {
             buildingMap[building] = {
                 building,

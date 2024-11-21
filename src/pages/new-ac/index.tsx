@@ -119,7 +119,7 @@ const NewAc = () => {
         };
     }, [isInputLoc]);
 
-    const handleSelectRoomChange = (id: Number) => {
+    const handleSelectRoomChange = (id: number) => {
         const selectedData = isLoc.dataRoom.find((room: LocType) => room.id == Number(id));
         if(selectedData){
             setIsInputLoc({ ...isInputLoc, room: selectedData.room, id: String(selectedData.id) });

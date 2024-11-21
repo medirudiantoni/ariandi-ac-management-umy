@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { ArrowLeftIcon, Search } from 'lucide-react'
 import { useRouter as useRouterNav } from 'next/navigation';
 import SearchEl from '../search';

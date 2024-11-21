@@ -1,7 +1,6 @@
 import React from 'react'
 import { AirVent, ChartColumn, History, House, Locate, Plus, Settings, SidebarClose } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion';
-import PageWrapper from '@/components/elements/pageWrapper';
 
 type SidebarProps = {
     onClose: VoidFunction;

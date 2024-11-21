@@ -31,7 +31,8 @@ const NewLocation = () => {
 
     const handlePlusRoom = (floorIndex: number) => {
         const updatedRooms: number[] = [...roomsPerFloor];
-        updatedRooms[floorIndex] ? updatedRooms[floorIndex] = updatedRooms[floorIndex] : updatedRooms[floorIndex] = 1; 
+        // updatedRooms[floorIndex] ? updatedRooms[floorIndex] = updatedRooms[floorIndex] : updatedRooms[floorIndex] = 1; 
+        updatedRooms[floorIndex] = updatedRooms[floorIndex] || 1;
         const newRoomCount = updatedRooms[floorIndex] + 1;
     
         if (newRoomCount <= 10) {

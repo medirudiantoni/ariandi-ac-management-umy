@@ -1,5 +1,5 @@
-import { Info, X } from 'lucide-react'
-import React, { useEffect, useState } from 'react'
+import { X } from 'lucide-react'
+import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 
 type InputData = {
@@ -16,7 +16,7 @@ type ModalMaintenanceIsDoneProps = {
 }
 
 const ModalDoneMaintenance: React.FC<ModalMaintenanceIsDoneProps> = ({ acId, id, onClose, onSetInitialMount }) => {
-    const maintenance_type_list = ["Pembersihan", "Penggantian", "Perbaikan"];
+    // const maintenance_type_list = ["Pembersihan", "Penggantian", "Perbaikan"];
     const [isInputData, setIsInputData] = useState<InputData>({
         cost: undefined,
         repair_details: "",
