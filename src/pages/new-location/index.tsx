@@ -31,6 +31,7 @@ const NewLocation = () => {
 
     const handlePlusRoom = (floorIndex: number) => {
         const updatedRooms: number[] = [...roomsPerFloor];
+        console.log(updatedRooms)
         // updatedRooms[floorIndex] ? updatedRooms[floorIndex] = updatedRooms[floorIndex] : updatedRooms[floorIndex] = 1; 
         updatedRooms[floorIndex] = updatedRooms[floorIndex] || 1;
         const newRoomCount = updatedRooms[floorIndex] + 1;
@@ -41,14 +42,22 @@ const NewLocation = () => {
         }
     };
 
+    // const handleResetRoom = (floorIndex: number) => {
+    //     const updatedRooms: number[] = [...roomsPerFloor];
+    
+    //     // Reset jumlah kamar pada lantai tertentu ke 1
+    //     updatedRooms[floorIndex] = 1;
+    
+    //     // Update state dengan array yang telah diubah
+    //     setRoomsPerFloor(updatedRooms);
+    // };
+
     const handleResetRoom = (floorIndex: number) => {
-        const updatedRooms: number[] = [...roomsPerFloor];
-    
-        // Reset jumlah kamar pada lantai tertentu ke 1
-        updatedRooms[floorIndex] = 1;
-    
-        // Update state dengan array yang telah diubah
-        setRoomsPerFloor(updatedRooms);
+        setRoomsPerFloor((prev) => {
+            const updatedRooms = [...prev];
+            updatedRooms[floorIndex] = 1; // Reset room count
+            return updatedRooms;
+        });
     };
     
     const handleMinusRoom = (floorIndex: number) => {

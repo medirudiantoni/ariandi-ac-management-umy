@@ -1,32 +1,29 @@
 import BottomBar from '@/components/elements/bottomBar'
 import MaintenanceCard from '@/components/elements/maintenanceCard';
+import MaintenancesSkeleton from '@/components/elements/skeletons/maintenacesSkeleton';
 import TopBar from '@/components/elements/topBar'
 import MaintenanceData from '@/types/maintenance';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
+import useSWR from 'swr'
+
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 const Maintenance = () => {
     const [isFilter, setIsFilter] = useState<boolean>(true);
-    const [isOnGoingMaintenances, setIsOnGoingMaintenances] = useState<MaintenanceData[]>([]);
-    const [isDoneMaintenances, setIsDoneMaintenances] = useState<MaintenanceData[]>([]);
 
-    const [isMounted, setIsMounted] = useState(true);
-    useEffect(() => {
-        const getAllMaintenanceData = async () => {
-            try {
-                const result = await fetch(`/api/v1/maintenance`).then(res => res.json());
-                if (result.data) {
-                    setIsOnGoingMaintenances(result.data.filter((data: MaintenanceData) => data.status !== "Selesai"));
-                    setIsDoneMaintenances(result.data.filter((data: MaintenanceData) => data.status === "Selesai"))
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        };
-        if (isMounted) {
-            getAllMaintenanceData();
-            setIsMounted(false);
-        }
-    }, [isMounted]);
+    const { data: maintenanceData } = useSWR(`/api/v1/maintenance`, fetcher);
+
+    const isDoneMaintenances: MaintenanceData[] = maintenanceData?.data
+        ? maintenanceData.data.filter((data: MaintenanceData) => data.status === "Selesai")
+        : [];
+
+    const isOnGoingMaintenances: MaintenanceData[] = maintenanceData?.data
+        ? maintenanceData.data.filter((data: MaintenanceData) => data.status !== "Selesai")
+        : [];
+
+    if(!maintenanceData){
+        return <MaintenancesSkeleton />
+    }
 
     return (
         <div className='w-full min-h-full bg-slate-50 relative pt-20 pb-16'>
@@ -39,7 +36,7 @@ const Maintenance = () => {
                 </div>
                 {isFilter ? (
                     <div className="w-full h-fit flex flex-col gap-2">
-                        {isDoneMaintenances && isDoneMaintenances.length > 0 ? isDoneMaintenances.map((data, id) => (
+                        {isDoneMaintenances.length > 0 ? isDoneMaintenances.map((data, id) => (
                             <MaintenanceCard key={data.id} id={Number(data.id)} no={id + 1} date={Number(data.start_date)} maintenance_type={data.maintenance_type} status={data.status} />
                         )) : (
                             <div className="w-full h-fit bg-slate-100 py-10 text-center">
@@ -49,7 +46,7 @@ const Maintenance = () => {
                     </div>
                 ) : (
                     <div className="w-full h-fit flex flex-col gap-2">
-                        {isOnGoingMaintenances && isOnGoingMaintenances.length > 0 ? isOnGoingMaintenances.map((data, id) => (
+                        {isOnGoingMaintenances.length > 0 ? isOnGoingMaintenances.map((data, id) => (
                             <MaintenanceCard key={data.id} id={Number(data.id)} no={id + 1} date={Number(data.start_date)} maintenance_type={data.maintenance_type} status={data.status} />
                         )) : (
                             <div className="w-full h-fit bg-slate-100 py-10 text-center">

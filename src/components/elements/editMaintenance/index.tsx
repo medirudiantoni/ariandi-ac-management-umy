@@ -13,7 +13,7 @@ type ModalNewMaintenanceProps = {
     acId: string;
     id: string;
     onClose: () => void;
-    onSetInitialMount: () => void;
+    onSetInitialMount?: () => void;
 }
 
 const ModalEditMaintenance: React.FC<ModalNewMaintenanceProps> = ({ id, onClose, onSetInitialMount }) => {
@@ -74,7 +74,9 @@ const ModalEditMaintenance: React.FC<ModalNewMaintenanceProps> = ({ id, onClose,
                 maintenance_type: "",
                 coordinator: ""
             });
-            onSetInitialMount();
+            if(onSetInitialMount){
+                onSetInitialMount();
+            }
             onClose();
         } catch (error) {
             console.log(error);

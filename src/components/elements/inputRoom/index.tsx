@@ -1,5 +1,5 @@
 import { Minus, Plus } from 'lucide-react';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface InputRoomType {
     onMinus: () => void;
@@ -10,8 +10,12 @@ interface InputRoomType {
 }
 
 const InputRoom:React.FC<InputRoomType> = ({ onMinus, onPlus, onReset, value, onChange }) => {
+    const [isMounted, setIsMounted] = useState(true);
     useEffect(() => {
-        onReset();
+        if(isMounted){
+            onReset();
+            setIsMounted(false)
+        }
     }, [onReset]);
     return (
         <div className="flex items-center gap-2">

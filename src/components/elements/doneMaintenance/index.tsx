@@ -12,7 +12,7 @@ type ModalMaintenanceIsDoneProps = {
     acId: string;
     id: string;
     onClose: () => void;
-    onSetInitialMount: () => void;
+    onSetInitialMount?: () => void;
 }
 
 const ModalDoneMaintenance: React.FC<ModalMaintenanceIsDoneProps> = ({ acId, id, onClose, onSetInitialMount }) => {
@@ -83,7 +83,9 @@ const ModalDoneMaintenance: React.FC<ModalMaintenanceIsDoneProps> = ({ acId, id,
                 };
                 setIsDone({...isDone, isAc: true});
                 toast.success("Laporan hasil perawatan sukses dikirim");
-                onSetInitialMount();
+                if(onSetInitialMount){
+                    onSetInitialMount();
+                }
                 onClose();
                 console.log('iyaa')
             } catch (error) {
