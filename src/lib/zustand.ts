@@ -1,4 +1,18 @@
+import LocType from "@/types/locData";
 import { create } from "zustand";
+
+type LocationsStore = {
+    locationsData: LocType[];
+    setDataLoc: (payload: LocType[]) => void;
+    resetDataLoc: () => void;
+  };
+  
+
+export const useLocations = create<LocationsStore>((set) => ({
+    locationsData: [],
+    setDataLoc: (payload) => set(() => ({ locationsData: payload })),
+    resetDataLoc: () => set(() => ({ locationsData: [] }))
+}))
 
 interface FloorSelection {
     selectedFloor: string;

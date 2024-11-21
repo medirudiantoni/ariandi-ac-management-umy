@@ -4,6 +4,10 @@ import BottomBar from '@/components/elements/bottomBar';
 import Link from 'next/link';
 import AcDataType from '@/types/acData';
 import LocType from '@/types/locData';
+import useSWR from 'swr';
+import { fetcher } from '@/utils/fetcher';
+import { useLocations } from '@/lib/zustand';
+import IndexSkeleton from '@/components/elements/skeletons/indexSkeletons';
 
 interface IsLocStateType {
   building: number;
@@ -12,12 +16,42 @@ interface IsLocStateType {
 }
 
 const Index = () => {
+  const [isDataAc, setIsDataAc] = useState<AcDataType[]>([]);
+
+  const setDataLoc = useLocations(state => state.setDataLoc);
+
+  const { data: locationData, error: locError } = useSWR('/api/v1/location', fetcher);
+  const { data: acData, error: acError } = useSWR('/api/v1/ac', fetcher);
+
+  useEffect(() => {
+    if (acData) {
+      if(acData.data){
+        if(acData.data.length > 0){
+          setIsDataAc(acData.data);
+        }
+      }
+    }
+  }, [acData]);
+
   const [isLoc, setIsLoc] = useState<IsLocStateType>({
     building: 0,
     floor: 0,
     room: 0
   });
-  const [isDataAc, setIsDataAc] = useState<AcDataType[]>([]);
+
+  useEffect(() => {
+    if (locationData) {
+      if(locationData.data){
+        setDataLoc(locationData.data);
+        const building = new Set(locationData.data.map((item: LocType) => item.building)).size;
+        const floor = new Set(locationData.data.map((item: LocType) => `${item.building}-${item.floor}`)).size;
+        const room = new Set(locationData.data.map((item: LocType) => `${item.building}-${item.floor}-${item.room}`)).size;
+        setIsLoc({ building, floor, room });
+      }
+    }
+  }, [locationData]);
+
+  // Filter data AC berdasarkan kondisi
   const [isOperatingAc, setIsOperatingAc] = useState<AcDataType[]>([]);
   const [isNotOperatingAc, setIsNotOperatingAc] = useState<AcDataType[]>([]);
   const [isBrokenAc, setIsBrokenAc] = useState<AcDataType[]>([]);
@@ -26,7 +60,7 @@ const Index = () => {
   const [isNotRepairing, setIsNotRepairing] = useState<AcDataType[]>([]);
 
   useEffect(() => {
-    if(isDataAc && isDataAc.length > 0){
+    if (isDataAc && isDataAc.length > 0) {
       setIsOperatingAc(isDataAc.filter((item) => item.condition == true));
       setIsNotOperatingAc(isDataAc.filter((item) => item.condition == false));
       setIsBrokenAc(isDataAc.filter((item) => item.is_broken == true));
@@ -36,30 +70,9 @@ const Index = () => {
     }
   }, [isDataAc]);
 
-  useEffect(() => {
-    const getLoc = async () => {
-      try {
-        const response = await fetch(`/api/v1/location`).then(res => res.json());
-        const building = new Set(response.data.map((item: LocType) => item.building)).size;
-        const floor = new Set(response.data.map((item: LocType) => `${item.building}-${item.floor}`)).size;
-        const room = new Set(response.data.map((item: LocType) => `${item.building}-${item.floor}-${item.room}`)).size;
-        setIsLoc({ building, floor, room });
-      } catch (error) {
-        console.log(error);
-        setIsLoc({ building: 0, floor: 0, room: 0 });
-      }
-    };
-    const getAllAc = async () => {
-      try {
-        const response = await fetch(`/api/v1/ac`).then(res => res.json());
-        setIsDataAc(response.data)
-      } catch (error) {
-        console.log(error)
-      }
-    };
-    getLoc();
-    getAllAc();
-  }, [])
+  // Loading state untuk SWR
+  if (!acData || !locationData) return <IndexSkeleton />;
+  if (locError || acError) return <div>Error loading data</div>;
 
   return (
     <div className='w-full h-full bg-slate-50 relative pt-20 pb-40'>

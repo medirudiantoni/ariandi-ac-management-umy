@@ -1,7 +1,8 @@
 import RoomCard from '@/components/elements/roomCard';
+import BuildingSkeleton from '@/components/elements/skeletons/buildingSkeleton';
 import TopBar from '@/components/elements/topBar'
 import transformData, { calculateFloorData } from '@/lib/transformDataLoc';
-import { useSelectFloor } from '@/lib/zustand';
+import { useLocations, useSelectFloor } from '@/lib/zustand';
 import LocType from '@/types/locData';
 import { BuildingData, FloorData } from '@/types/teriversal';
 import { useRouter } from 'next/router';
@@ -12,14 +13,18 @@ const Navigate = () => {
     const [isLoc, setIsLoc] = useState<LocType[]>([]);
     const [isLocBuilding, setIsLocBuilding] = useState<BuildingData>({
         building: "",
-        floors: 0, 
-        rooms: 0,  
+        floors: 0,
+        rooms: 0,
         total_ac: 0,
-        condition_true: 0, 
+        condition_true: 0,
         condition_false: 0,
     });
     const [isLocFloor, setIsLocFloor] = useState<FloorData[]>([]);
     const [isLocRoom, setIsLocRoom] = useState<LocType[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const locationsData = useLocations(state => state.locationsData);
+    const setDataLoc = useLocations(state => state.setDataLoc);
 
     const selectedFloor = useSelectFloor(state => state.selectedFloor);
     const selectTheFloor = useSelectFloor(state => state.selectTheFloor);
@@ -29,7 +34,9 @@ const Navigate = () => {
         const getLoc = async () => {
             try {
                 const response = await fetch(`/api/v1/location`).then(res => res.json());
-                const selectedBuilding = transformData(response.data).find((loc) => loc.building == query.id)
+
+                const selectedBuilding = transformData(response.data).find((loc) => loc.building == query.id);
+
                 setIsLocBuilding(
                     selectedBuilding || {
                         building: "",
@@ -40,15 +47,35 @@ const Navigate = () => {
                         condition_false: 0,
                     }
                 );
-                
+
                 const floorsOfTheBuilding = calculateFloorData(response.data).filter((data) => data.building == query.id);
                 setIsLocFloor(floorsOfTheBuilding);
                 setIsLoc(response.data);
+                setDataLoc(response.data);
+                setIsLoading(false);
             } catch (error) {
                 console.log(error)
             }
         };
-        getLoc();
+        if(locationsData.length > 0){
+            const selectedBuilding = transformData(locationsData).find((loc) => loc.building == query.id);
+            setIsLocBuilding(
+                selectedBuilding || {
+                    building: "",
+                    floors: 0,
+                    rooms: 0,
+                    total_ac: 0,
+                    condition_true: 0,
+                    condition_false: 0,
+                }
+            );
+            const floorsOfTheBuilding = calculateFloorData(locationsData).filter((data) => data.building == query.id);
+            setIsLocFloor(floorsOfTheBuilding);
+            setIsLoc(locationsData);
+        } else {
+            setIsLoading(true);
+            getLoc();
+        }
     }, []);
 
     useEffect(() => {
@@ -60,6 +87,10 @@ const Navigate = () => {
             getAcPerFloor(selectedFloor);
         }
     }, [selectedFloor, isLoc]);
+
+    if(isLoading){
+        return <BuildingSkeleton />
+    }
 
     return (
         <div className="w-full h-full bg-slate-50 pt-16">

@@ -1,6 +1,8 @@
 import BuildingCard from '@/components/elements/buildingCard';
+import TriversalSkeleton from '@/components/elements/skeletons/triversalSkeletons';
 import TopBar from '@/components/elements/topBar';
 import transformData from '@/lib/transformDataLoc';
+import { useLocations } from '@/lib/zustand';
 import { Grid2x2, ArrowUpDown } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 
@@ -15,17 +17,33 @@ interface TriversalLocType {
 
 const Triversal = () => {
     const [isLoc, setLoc] = useState<TriversalLocType[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const locationsData = useLocations(state => state.locationsData);
+    const setDataLoc = useLocations(state => state.setDataLoc);
+
     useEffect(() => {
         const getLoc = async () => {
             try {
                 const response = await fetch(`/api/v1/location`).then(res => res.json());
                 setLoc(transformData(response.data));
+                setDataLoc(response.data);
+                setIsLoading(false);
             } catch (error) {
                 console.log(error)
             }
         };
-        getLoc();
-    }, []);
+        if(locationsData.length > 0){
+            setLoc(transformData(locationsData));
+        } else {
+            setIsLoading(true);
+            getLoc();
+        }
+    }, [locationsData]);
+
+    if(isLoading){
+        return <TriversalSkeleton />
+    }
 
     return (
         <div className='w-full h-full bg-slate-50 relative pt-20'>
