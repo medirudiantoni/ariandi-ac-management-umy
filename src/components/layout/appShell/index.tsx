@@ -17,7 +17,7 @@ const AppShell = ({ children }: AppShellProps) => {
   // const hideNavbar = noNavbar.includes(pathname) || pathname.startsWith('/dashboard');
   return (
     <div className={`w-full bg-orange-200 border-x-2 h-fit min-h-screen overflow-x-hidden ${pathname === noLayout ? '' : 'flex justify-center'} ${poppins.className}`}>
-      <div className={`w-full max-w-md relative overflow-x-hidden`}>
+      <div className={`w-full max-w-sm relative overflow-x-hidden`}>
         {children}
       </div>
     </div>
