@@ -1,5 +1,5 @@
 import BottomBar from '@/components/elements/bottomBar'
-import MaintenanceCard from '@/components/elements/maintenanceCard';
+import MaintenanceCard2 from '@/components/elements/maintenanceCard2';
 import MaintenancesSkeleton from '@/components/elements/skeletons/maintenacesSkeleton';
 import TopBar from '@/components/elements/topBar'
 import MaintenanceData from '@/types/maintenance';
@@ -37,7 +37,7 @@ const Maintenance = () => {
                 {isFilter ? (
                     <div className="w-full h-fit flex flex-col gap-2">
                         {isDoneMaintenances.length > 0 ? isDoneMaintenances.map((data, id) => (
-                            <MaintenanceCard key={data.id} id={Number(data.id)} no={id + 1} date={Number(data.start_date)} maintenance_type={data.maintenance_type} status={data.status} />
+                            <MaintenanceCard2 key={data.id} id={Number(data.id)} no={id + 1} date={Number(data.start_date)} maintenance_type={data.maintenance_type} location={data.AC.loc.alias} />
                         )) : (
                             <div className="w-full h-fit bg-slate-100 py-10 text-center">
                                 <p className="text-slate-500 italic">No data</p>
@@ -47,7 +47,7 @@ const Maintenance = () => {
                 ) : (
                     <div className="w-full h-fit flex flex-col gap-2">
                         {isOnGoingMaintenances.length > 0 ? isOnGoingMaintenances.map((data, id) => (
-                            <MaintenanceCard key={data.id} id={Number(data.id)} no={id + 1} date={Number(data.start_date)} maintenance_type={data.maintenance_type} status={data.status} />
+                            <MaintenanceCard2 key={data.id} id={Number(data.id)} no={id + 1} date={Number(data.start_date)} maintenance_type={data.maintenance_type} location={data.AC.loc.alias} />
                         )) : (
                             <div className="w-full h-fit bg-slate-100 py-10 text-center">
                                 <p className="text-slate-500 italic">No data</p>

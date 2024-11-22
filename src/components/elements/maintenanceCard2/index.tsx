@@ -7,10 +7,10 @@ interface MaintenanceCardType {
   no: number;
   date: number;
   maintenance_type: string;
-  status: string;
+  location?: string
 }
 
-const MaintenanceCard: React.FC<MaintenanceCardType> = ({ id, no, date, maintenance_type, status }) => {
+const MaintenanceCard2: React.FC<MaintenanceCardType> = ({ id, no, date, location,  maintenance_type }) => {
   const { push } = useRouter();
   const time = new Date(Number(date));
   const time_start = formatDateTime(Number(time));
@@ -23,13 +23,13 @@ const MaintenanceCard: React.FC<MaintenanceCardType> = ({ id, no, date, maintena
             <p className="text-2xl font-bold">{no}</p>
         </div>
         <div className="flex-1">
-            <p className='text-sm text-slate-600'>{time_start}</p>
-            {/* <p className='text-sm text-slate-600'>id: {id}</p> */}
-            <p className='text-lg font-medium'>{maintenance_type}</p>
-            <p className='mt-2 text-blue-700'>{status}</p>
+            <p className='text-sm text-slate-600 mb-0.5'>{time_start}</p>
+            <p className='font-medium'>{location}</p>
+            <p className='font-medium'>{maintenance_type}</p>
+            {/* <p className='mt-2 text-blue-700'>{status}</p> */}
         </div>
     </button>
   )
 }
 
-export default MaintenanceCard
+export default MaintenanceCard2

@@ -24,7 +24,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse){
     } else if (req.method === 'GET'){
         try {
             const result = await prisma.maintenance.findMany({
-                include: { AC: true }
+                include: { AC: {
+                    include: {
+                        loc: true
+                    }
+                } }
             });
             res.status(201).json({ data: result })
         } catch (error) {

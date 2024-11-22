@@ -47,7 +47,7 @@ const SearchEl: React.FC<SearchElProps> = ({ onClose }) => {
     }, [searchResults]);
 
     return (
-        <div className='absolute z-20 top-0 left-0 w-full max-w-sm h-screen bg-black/40'>
+        <div className='absolute z-20 top-0 left-0 w-full max-w-sm overflow-x-hidden h-screen bg-black/40'>
             <div className="fixed top-0 w-full max-w-sm mx-auto pt-5 p-2 bg-white">
                 <div className="flex items-center gap-1 border-b-2">
                     <input 
@@ -65,7 +65,7 @@ const SearchEl: React.FC<SearchElProps> = ({ onClose }) => {
                 </div>
             </div>
 
-            <div className="w-full pt-5 p-2 bg-white"></div>
+            <div className="w-full pt-14 p-2 bg-white"></div>
 
             {isLoading && (
                 <div className="w-full p-4 bg-slate-50 pt-10">Loading...</div>

@@ -21,7 +21,7 @@ const TopBar:React.FC<TopBarProps> = ({backButton = false, title, search = true,
   }
   
   return (
-    <div className="fixed z-20 top-0 mx-auto w-full max-w-sm flex items-center justify-between py-5 px-2 bg-slate-50">
+    <div className="fixed z-20 top-0 mx-auto w-full max-w-sm flex items-center justify-between py-5 px-2 bg-slate-50 shadow-sm">
       {backButton ? (<button onClick={handleBack} className='w-10 aspect-square rounded-full hover:bg-slate-200 flex items-center justify-center'>
         <ArrowLeftIcon />
       </button>) : <div className='w-10 aspect-square'></div>}
