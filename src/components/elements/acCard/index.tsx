@@ -23,8 +23,8 @@ const AcCard: React.FC<AcCardProps> = ({ brand, location, status, isMaintaining,
                         <p>Normal</p>
                     </div>
                 ) : (
-                    <div className="py-1.5 px-5 h-fit w-fit rounded-full bg-red-500 text-white">
-                        <p>Rusak</p>
+                    <div className="py-1.5 px-5 h-fit w-fit rounded-full bg-gray-500 text-white">
+                        <p>Mati</p>
                     </div>
                 )}
                 {isMaintaining ? (

@@ -28,7 +28,10 @@ export default async function (req: NextApiRequest, res: NextApiResponse){
                     include: {
                         loc: true
                     }
-                } }
+                }},
+                orderBy: {
+                    id: 'desc'
+                }
             });
             res.status(201).json({ data: result })
         } catch (error) {

@@ -1,9 +1,11 @@
 import InputRoom from '@/components/elements/inputRoom';
+import Spin from '@/components/elements/spinSVG';
 import TopBar from '@/components/elements/topBar'
 import { Minus, Plus } from 'lucide-react';
 import { useRouter } from 'next/router';
 import React, { ChangeEvent, FormEvent, useState } from 'react'
 import toast from 'react-hot-toast';
+import Swal from 'sweetalert2';
 
 const NewLocation = () => {
     const router = useRouter();
@@ -11,6 +13,7 @@ const NewLocation = () => {
     const [isBuilding, setIsBuilding] = useState<string>("");
     const [isFloorLength, setIsFloorLength] = useState<number>(0);
     const [roomsPerFloor, setRoomsPerFloor] = useState<number[]>([]);
+    const [isLoadingSave, setIsLoadingSave] = useState<boolean>(false);
 
     const handleFloorCountChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const count: number = parseInt(e.target.value) || 0;
@@ -35,7 +38,7 @@ const NewLocation = () => {
         // updatedRooms[floorIndex] ? updatedRooms[floorIndex] = updatedRooms[floorIndex] : updatedRooms[floorIndex] = 1; 
         updatedRooms[floorIndex] = updatedRooms[floorIndex] || 1;
         const newRoomCount = updatedRooms[floorIndex] + 1;
-    
+
         if (newRoomCount <= 10) {
             updatedRooms[floorIndex] = newRoomCount;
             setRoomsPerFloor(updatedRooms);
@@ -44,10 +47,10 @@ const NewLocation = () => {
 
     // const handleResetRoom = (floorIndex: number) => {
     //     const updatedRooms: number[] = [...roomsPerFloor];
-    
+
     //     // Reset jumlah kamar pada lantai tertentu ke 1
     //     updatedRooms[floorIndex] = 1;
-    
+
     //     // Update state dengan array yang telah diubah
     //     setRoomsPerFloor(updatedRooms);
     // };
@@ -59,16 +62,16 @@ const NewLocation = () => {
             return updatedRooms;
         });
     };
-    
+
     const handleMinusRoom = (floorIndex: number) => {
         const updatedRooms: number[] = [...roomsPerFloor];
         const newRoomCount = updatedRooms[floorIndex] - 1;
-    
+
         if (newRoomCount >= 1) {
             updatedRooms[floorIndex] = newRoomCount;
             setRoomsPerFloor(updatedRooms);
         }
-    };    
+    };
 
     const handleRoomCountChange = (floorIndex: number, value: string): void => {
         const updatedRooms: number[] = [...roomsPerFloor];
@@ -78,6 +81,7 @@ const NewLocation = () => {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
+        setIsLoadingSave(true);
 
         const data = {
             name: isBuildingName,
@@ -100,11 +104,23 @@ const NewLocation = () => {
             if (!response.ok) {
                 throw new Error('Failed to save location');
             }
+            Swal.fire({
+                title: 'Sukses!',
+                text: 'Berhasil menambah data Lokasi baru!',
+                icon: 'success',
+            });
             toast.success("Data lokasi berhasil disimpan!");
+            setIsLoadingSave(false);
             router.replace('/settings');
         } catch (error) {
             console.error('Error saving location:', error);
             alert('Gagal menyimpan data lokasi.');
+            setIsLoadingSave(false);
+            Swal.fire({
+                title: 'Gagal!',
+                text: 'Gagal menambah data Lokasi baru!',
+                icon: 'error',
+            });
         }
     };
 
@@ -148,7 +164,18 @@ const NewLocation = () => {
                             ))}
                         </div>
                     </div>
-                    <button type='submit' className="w-full h-fit py-2 px-4 rounded-xl bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-900 active:scale-95 duration-75">Save</button>
+                    {isLoadingSave ? (
+                        <button type='submit' className={`w-full h-fit py-2 px-4 rounded-xl bg-slate-400 text-white active:scale-95 duration-75`} disabled>
+                            <span className='flex items-center justify-center'>
+                                <Spin />
+                                Loading...
+                            </span>
+                        </button>
+                    ) : (
+                        <button type='submit' className={`w-full h-fit py-2 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-900 text-white active:scale-95 duration-75`}>
+                            Simpan
+                        </button>
+                    )}
                 </form>
             </div>
         </div>
