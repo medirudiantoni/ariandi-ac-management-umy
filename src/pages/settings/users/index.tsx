@@ -1,9 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import TopBar from '@/components/elements/topBar'
 import { useRouter } from 'next/router'
+import useSWR from 'swr'
+
+const fetcher = (url: string) => fetch(url).then(res => res.json());
 
 const Settings = () => {
-    const { push } = useRouter()
+    const { data, isLoading } = useSWR('/api/user', fetcher);
+    const { push } = useRouter();
+    if (isLoading) {
+        return (
+            <div className="w-full h-full bg-slate-50 relative pt-20 px-5">
+                Loading...
+            </div>
+        )
+    }
     return (
         <div className='w-full h-full bg-slate-50 relative pt-20'>
             <TopBar backButton={true} title='Atur pengguna' search={false} />
@@ -21,16 +32,13 @@ const Settings = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr onClick={() => push(`/users/1`)} className='py-1.5 hover:bg-slate-200'>
-                                <td className='py-2'>01</td>
-                                <td className='py-2'>Ariandi</td>
-                                <td className='py-2'>Admin</td>
-                            </tr>
-                            <tr onClick={() => push(`/users/1`)} className='py-1.5 hover:bg-slate-200'>
-                                <td className='py-2'>02</td>
-                                <td className='py-2'>Kim jong unch</td>
-                                <td className='py-2'>User</td>
-                            </tr>
+                            {data.users.map((user: any, id: number) => (
+                                <tr key={id} onClick={() => push(`/users/${user.id}`)} className='py-1.5 hover:bg-slate-200'>
+                                    <td className='py-2'>{id + 1}</td>
+                                    <td className='py-2'>{user.username}</td>
+                                    <td className='py-2'>{user.role.title}</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>

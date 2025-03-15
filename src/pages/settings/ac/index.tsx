@@ -299,7 +299,6 @@ const NewAc = () => {
                         </div>
                         <div className="w-full flex gap-2">
                             <button onClick={() => setIsConfirm(false)} className='flex-1 rounded-xl py-2 px-4 border-2 border-blue-600'>Cancel</button>
-                            {/* <button onClick={handleSubmitForm} className='flex-1 rounded-xl py-2 px-4 bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-900 active:scale-95 duration-75'>Confirm</button> */}
                             <button
                                 onClick={handleSubmitForm}
                                 className={`flex items-center justify-center rounded-xl py-2 px-4 

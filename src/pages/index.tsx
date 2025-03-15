@@ -8,6 +8,7 @@ import useSWR from 'swr';
 import { fetcher } from '@/utils/fetcher';
 import { useLocations } from '@/lib/zustand';
 import IndexSkeleton from '@/components/elements/skeletons/indexSkeletons';
+import { useSession } from 'next-auth/react';
 
 interface IsLocStateType {
   building: number;
@@ -69,6 +70,11 @@ const Index = () => {
       setIsNotRepairing(isDataAc.filter((item) => item.is_broken == true && !item.status.includes('Sedang')));
     }
   }, [isDataAc]);
+
+  const { data } = useSession();
+  useEffect(() => {
+    console.log("user: ", data);
+  }, [data])
 
   // Loading state untuk SWR
   if (!acData || !locationData) return <IndexSkeleton />;

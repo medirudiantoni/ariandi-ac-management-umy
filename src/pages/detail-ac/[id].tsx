@@ -2,9 +2,11 @@ import MaintenanceCard from '@/components/elements/maintenanceCard';
 import ModalNewMaintenance from '@/components/elements/newMaintenance';
 import DetailAcSkeleton from '@/components/elements/skeletons/detailAcSkeleton';
 import TopBar from '@/components/elements/topBar';
+import { hasAccess2 } from '@/lib/access';
 // import AcDataType from '@/types/acData';
-import MaintenanceData from '@/types/maintenance'; 
+import MaintenanceData from '@/types/maintenance';
 import { TimerIcon } from 'lucide-react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
@@ -12,6 +14,7 @@ import useSWR from 'swr';
 
 const DetailAc = () => {
     const { query } = useRouter();
+    const { data } = useSession();
 
     // SWR untuk AC Data
     const { data: acData, error: acError } = useSWR(
@@ -41,7 +44,7 @@ const DetailAc = () => {
     }
 
     if (!acData || !maintenanceData) {
-        return <DetailAcSkeleton/>;
+        return <DetailAcSkeleton />;
     }
 
     const isAc = acData.data;
@@ -116,7 +119,7 @@ const DetailAc = () => {
                     >
                         Pemeliharaan baru
                     </button>
-                ) : (
+                ) : hasAccess2.includes(data?.user.role as string) && (
                     <button
                         onClick={handleSetMaintenance}
                         className="w-full py-3 px-4 rounded-2xl bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-900 active:scale-95 duration-75"
@@ -150,7 +153,7 @@ const DetailAc = () => {
                 </div>
             </div>
 
-            {isMaintenance && (
+            {isMaintenance && hasAccess2.includes(data?.user.role as string) && (
                 <ModalNewMaintenance id={String(query.id)} onClose={() => setIsMaintenance(false)} />
             )}
         </div>

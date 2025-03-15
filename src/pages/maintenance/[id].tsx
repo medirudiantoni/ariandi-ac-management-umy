@@ -7,15 +7,14 @@ import { useRouter } from 'next/router'
 import { useRouter as useRouterNav } from 'next/navigation';
 import React, { useState } from 'react'
 import useSWR from 'swr'
-// import LocType from '@/types/locData'
-// import MaintenanceData from '@/types/maintenance'
 import { fetcher } from '@/utils/fetcher'
 import MaintenanceSkeleton from '@/components/elements/skeletons/maintenanceSkel'
-
-// const fetcher = (url: string) => fetch(url).then(res => res.json());
+import { useSession } from 'next-auth/react'
+import { hasAccess2 } from '@/lib/access'
 
 const MaintenancePage = () => {
     const { query } = useRouter();
+    const { data } = useSession();
     const { back } = useRouterNav();
     const [isEditMaintenance, setIsEditMaintenance] = useState(false);
     const [isDoneMaintenance, setIsDoneMaintenance] = useState(false);
@@ -102,7 +101,7 @@ const MaintenancePage = () => {
                         </tbody>
                     </table>
                 </div>
-                {maintenanceData && maintenanceData.data.status !== "Selesai" ? (
+                {hasAccess2.includes(data?.user.role as string) && maintenanceData && maintenanceData.data.status !== "Selesai" ? (
                     <div className="w-full flex items-center gap-2">
                         <button onClick={() => setIsEditMaintenance(true)} className='py-2 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 duration-75 text-white'><Edit3 /></button>
                         <button onClick={() => setIsDoneMaintenance(true)} className='flex-1 py-2 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:scale-95 duration-75 text-white'>Selesai</button>

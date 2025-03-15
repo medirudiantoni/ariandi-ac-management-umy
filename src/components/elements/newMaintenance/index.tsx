@@ -79,10 +79,6 @@ const ModalNewMaintenance: React.FC<ModalNewMaintenanceProps> = ({ id, onClose }
                         <div className="w-full flex-1">
 
                             <h3 className="text-xl font-semibold mb-2 pb-1 border-b-2">Pemeliharaan baru</h3>
-                            {/* <div className="flex flex-col gap-1 mb-3">
-                            <label htmlFor="start_date">Tanggal mulai:</label>
-                            <input onChange={(e) => setIsInputData({...isInputData, start_date: e.target.value})} type="date" className='py-2 px-4 rounded-xl bg-slate-200' />
-                        </div> */}
                             <div className="flex flex-col gap-1 mb-3">
                                 <label htmlFor="technician">Teknisi:</label>
                                 <input value={isInputData.technician} onChange={(e) => setIsInputData({ ...isInputData, technician: e.target.value })} type="text" id="technician" className='py-2 px-4 rounded-xl bg-slate-200' />

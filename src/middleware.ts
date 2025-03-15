@@ -6,4 +6,4 @@ export function mainMiddleware(){
     return res;
 };
 
-export default withAuth(mainMiddleware, ['/dashboard', '/admin']);
+export default withAuth(mainMiddleware, ['/dashboard', '/admin', '/settings', '/settings/profile', '/settings/users', '/settings/lokasi', '/settings/lokasi/lokasi-baru', '/settings/ac']);

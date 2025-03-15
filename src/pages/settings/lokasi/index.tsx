@@ -11,7 +11,7 @@ const Settings = () => {
             <div className="w-full h-full flex flex-col p-5">
                 <div className="w-full h-fit p-2">
                     <button
-                        onClick={() => push('/new-location')}
+                        onClick={() => push('/settings/lokasi/lokasi-baru')}
                         className="w-full p-2 border-b-2 flex items-center hover:bg-slate-200 justify-between">
                         <p>Tambah Lokasi baru</p>
                         <ChevronRight />
