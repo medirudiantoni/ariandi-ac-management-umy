@@ -78,7 +78,7 @@ const Login = () => {
         {isError.status && <div className="py-1 px-2 my-2 bg-white rounded-md"><p className=" text-red-500">Incorrect email or password</p></div>}
         <div className="w-full flex mt-2 items-center gap-2">
           <p>
-            <span className="mr-2">Don't have an Account?</span>
+            <span className="mr-2">Do not have an Account yet?</span>
             <Link href="/register" className="text-blue-600">Create Account here</Link>
           </p>
         </div>

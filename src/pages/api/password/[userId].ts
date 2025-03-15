@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getSession } from "next-auth/react";
+// import { getSession } from "next-auth/react";
 import bcrypt from "bcrypt";
-import { RoleSesssion } from "@/types/user";
+// import { RoleSesssion } from "@/types/user";
 import prisma from "@/lib/prismaClient";
 
 export default async function handler(

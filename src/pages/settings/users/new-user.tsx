@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import TopBar from '@/components/elements/topBar'
 import useSWR from 'swr';
 import { fetcher } from '@/utils/fetcher';

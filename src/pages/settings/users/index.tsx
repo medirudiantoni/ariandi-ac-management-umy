@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import TopBar from '@/components/elements/topBar'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
+import UserWithRole from '@/types/user';
 
 const fetcher = (url: string) => fetch(url).then(res => res.json());
 
@@ -32,7 +33,7 @@ const Settings = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data.users.map((user: any, id: number) => (
+                            {data.users.map((user: UserWithRole, id: number) => (
                                 <tr key={id} onClick={() => push(`/users/${user.id}`)} className='py-1.5 hover:bg-slate-200'>
                                     <td className='py-2'>{id + 1}</td>
                                     <td className='py-2'>{user.username}</td>

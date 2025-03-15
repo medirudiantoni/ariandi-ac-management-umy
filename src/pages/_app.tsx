@@ -1,7 +1,7 @@
 import AppShell from "@/components/layout/appShell";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
-import { SessionProvider, useSession } from "next-auth/react";
+import { SessionProvider } from "next-auth/react";
 import { AnimatePresence } from "framer-motion";
 import { useRouter } from "next/router";
 import { Toaster } from "react-hot-toast";
